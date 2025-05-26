@@ -35,8 +35,7 @@ def calculate_optimized_route(api_key, start_coords, end_coords, incidents_df=No
     ]
     
     # Para debuggear
-    st.write(f"Inicio: {start_coords}, Fin: {end_coords}")
-    st.write(f"Coordenadas para ORS: {coordinates}")
+
     
     # Configurar parámetros de la solicitud
     params = {
@@ -46,6 +45,10 @@ def calculate_optimized_route(api_key, start_coords, end_coords, incidents_df=No
         "units": "km",
         "language": "es",
         "geometry": "true",
+        "alternative_routes": {
+            "share_factor": 0.6,
+            "target_count": 3
+        }
     }
     
     # Si hay incidentes, añadir áreas a evitar
@@ -54,16 +57,13 @@ def calculate_optimized_route(api_key, start_coords, end_coords, incidents_df=No
         pass
     
     try:
-        st.write(f"URL: {ORS_DIRECTIONS_ENDPOINT}")
-        st.write(f"Parámetros: {json.dumps(params, indent=2)}")
+
         
         response = requests.post(ORS_DIRECTIONS_ENDPOINT, json=params, headers=headers)
-        st.write(f"Código de respuesta: {response.status_code}")
         
         response.raise_for_status()
         
         route_data = response.json()
-        st.write(f"Claves de respuesta: {list(route_data.keys())}")
         
         return route_data
     

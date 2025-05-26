@@ -151,14 +151,20 @@ m = create_base_map()
 
 if calcular:
     with st.spinner("Calculando rutas y riesgos de accidente..."):
-        # --- (1) Calcula rutas alternativas (puedes ampliar para obtener más de una)
+        # 1. Calcula rutas alternativas
+        response = calculate_optimized_route(ORS_API_KEY, start_coords, end_coords)
         rutas = []
-        # OpenRouteService puede devolver alternativas si se le pide (ver docs ORS)
-        ruta_1 = calculate_optimized_route(ORS_API_KEY, start_coords, end_coords)
-        rutas.append(ruta_1)
-        # Si quieres más alternativas, realiza más llamadas aquí, cambiando parámetros (no incluido por defecto)
+        if response and 'routes' in response:
+            for route in response['routes']:
+                route_data = {
+                    'routes': [route],
+                    'bbox': response.get('bbox', [])
+                }
+                rutas.append(route_data)
+        elif response:
+            rutas.append(response)
 
-        # --- (2) Analiza el riesgo de cada ruta
+        # 2. Analiza el riesgo de cada ruta
         resumen_rutas = []
         for idx, ruta in enumerate(rutas):
             riesgo, detalles = analizar_riesgo_ruta(ruta, selected_time)
@@ -169,30 +175,62 @@ if calcular:
                 "detalles": detalles
             })
 
-        # --- (3) Selecciona la ruta más segura
-        ruta_segura = min(resumen_rutas, key=lambda r: r['riesgo_medio'])
-        riesgo_pct = ruta_segura['riesgo_medio'] * 100
+        # 3. Guarda resultados en session_state para que los checkboxes funcionen al recargar
+        st.session_state['rutas'] = rutas
+        st.session_state['resumen_rutas'] = resumen_rutas
+        st.session_state['selected_time'] = selected_time
 
-        st.success(f"Ruta recomendada: riesgo promedio de accidente: {riesgo_pct:.2f}%")
-        st.info("Esta recomendación se basa en la predicción de accidentes de tu modelo IA, utilizando fecha, hora, distrito y barrio para cada segmento de la ruta.")
+# ------- Mostrar las rutas si existen en session_state (esto va FUERA del if calcular, en la parte principal) -------
+if 'rutas' in st.session_state and 'resumen_rutas' in st.session_state:
+    rutas = st.session_state['rutas']
+    resumen_rutas = st.session_state['resumen_rutas']
+    selected_time = st.session_state['selected_time']
 
-        # --- (4) Muestra la ruta recomendada en el mapa
-        m = add_route_to_map(m, ruta_segura['ruta'], color='blue', name="Ruta más segura")
-        # Visualización opcional: colorea los segmentos según riesgo
+    ruta_segura = min(resumen_rutas, key=lambda r: r['riesgo_medio'])
+    riesgo_pct = ruta_segura['riesgo_medio'] * 100
+
+    st.success(f"Ruta recomendada: riesgo promedio de accidente: {riesgo_pct:.2f}%")
+    st.info(f"Se analizaron {len(resumen_rutas)} rutas alternativas")
+
+    ruta_mostrar = []
+    st.markdown("#### Mostrar/Ocultar rutas alternativas:")
+    for idx, ruta_info in enumerate(resumen_rutas):
+        default = (ruta_info == ruta_segura)
+        label = f"Ruta {idx+1} - {'RECOMENDADA ' if ruta_info == ruta_segura else ''}(Riesgo: {ruta_info['riesgo_medio']*100:.1f}%)"
+        mostrar = st.checkbox(label, value=default, key=f"show_route_{idx}")
+        ruta_mostrar.append(mostrar)
+
+    m = create_base_map()
+    colors = ['green', 'blue', 'orange', 'red', 'purple']
+    for idx, ruta_info in enumerate(resumen_rutas):
+        if not ruta_mostrar[idx]:
+            continue
+        color = 'green' if ruta_info == ruta_segura else colors[idx % len(colors)]
+        name = f"Ruta {idx + 1} - RECOMENDADA" if ruta_info == ruta_segura else f"Ruta {idx + 1}"
+        m = add_route_to_map(m, ruta_info['ruta'], color=color, name=name)
+        # Añadir círculos de riesgo solo para la recomendada
         from folium import CircleMarker
-        for det in ruta_segura['detalles']:
-            lat, lon = det['coords']
-            riesgo = det['probabilidad']
-            color = (
-                'green' if riesgo < 0.2 else
-                'orange' if riesgo < 0.5 else
-                'red'
-            )
-            CircleMarker(location=[lat, lon], radius=4, color=color, fill=True, fill_color=color, fill_opacity=0.7).add_to(m)
-        folium_static(m)
+        for det in ruta_info['detalles']:
+                lat, lon = det['coords']
+                riesgo = det['probabilidad']
+                color_circle = (
+                    'green' if riesgo < 0.2 else
+                    'orange' if riesgo < 0.5 else
+                    'red'
+                )
+                CircleMarker(
+                    location=[lat, lon],
+                    radius=4,
+                    color=color_circle,
+                    fill=True,
+                    fill_color=color_circle,
+                    fill_opacity=0.7
+                ).add_to(m)
+    folium_static(m)
 
-        # --- (5) Opcional: muestra tabla con riesgos por segmento
-        st.markdown("### Detalle del riesgo por segmento:")
+    # Tabla de riesgos de la recomendada (solo si está seleccionada)
+    if ruta_mostrar[resumen_rutas.index(ruta_segura)]:
+        st.markdown("### Detalle del riesgo por segmento de la ruta recomendada:")
         df_detalle = pd.DataFrame([
             {
                 "Latitud": lat,
@@ -205,5 +243,4 @@ if calcular:
 else:
     st.info("Configura la ruta en la barra lateral y pulsa *Calcular rutas y recomendar la más segura*.")
 
-st.caption("Desarrollado por [Tu Nombre] • IA aplicada a movilidad segura")
 
