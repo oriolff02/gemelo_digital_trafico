@@ -45,7 +45,7 @@ def calculate_optimized_route(api_key, start_coords, end_coords, incidents_df=No
         "preference": "fastest",
         "units": "km",
         "language": "es",
-        "geometry": "true"
+        "geometry": "true",
     }
     
     # Si hay incidentes, añadir áreas a evitar
@@ -70,83 +70,3 @@ def calculate_optimized_route(api_key, start_coords, end_coords, incidents_df=No
     except requests.exceptions.RequestException as e:
         st.error(f"Error al calcular la ruta: {e}")
         return None
-
-def generate_mock_route_data(start_coords, end_coords):
-    """
-    Genera datos simulados de ruta para desarrollo o cuando la API no está disponible.
-    
-    Args:
-        start_coords (tuple): Coordenadas de inicio (lat, lon)
-        end_coords (tuple): Coordenadas de destino (lat, lon)
-        
-    Returns:
-        dict: Datos simulados de ruta en formato GeoJSON
-    """
-    # Convertir a formato [lon, lat]
-    start = [start_coords[1], start_coords[0]]
-    end = [end_coords[1], end_coords[0]]
-    
-    # Generar puntos intermedios simples para simular una ruta
-    # En un caso real, estos puntos vendrían de la API
-    intermediate_points = []
-    
-    # Calcular puntos intermedios simples (interpolación lineal)
-    steps = 15  # Número de puntos intermedios
-    for i in range(1, steps):
-        fraction = i / steps
-        lon = start[0] + (end[0] - start[0]) * fraction
-        lat = start[1] + (end[1] - start[1]) * fraction
-        intermediate_points.append([lon, lat])
-    
-    # Generar todos los puntos de la ruta
-    route_points = [start] + intermediate_points + [end]
-    
-    # Crear objeto GeoJSON simulado
-    route_data = {
-        "type": "FeatureCollection",
-        "features": [
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": route_points
-                },
-                "properties": {
-                    "segments": [
-                        {
-                            "distance": 1.2,  # km
-                            "duration": 420,  # segundos
-                            "steps": [
-                                {
-                                    "instruction": "Sal hacia el oeste",
-                                    "distance": 0.3,
-                                    "duration": 90
-                                },
-                                {
-                                    "instruction": "Gira a la derecha",
-                                    "distance": 0.4,
-                                    "duration": 120
-                                },
-                                {
-                                    "instruction": "Continúa recto",
-                                    "distance": 0.5,
-                                    "duration": 180
-                                },
-                                {
-                                    "instruction": "Has llegado a tu destino",
-                                    "distance": 0,
-                                    "duration": 0
-                                }
-                            ]
-                        }
-                    ],
-                    "summary": {
-                        "distance": 1.2,
-                        "duration": 420
-                    }
-                }
-            }
-        ]
-    }
-    
-    return route_data

@@ -22,7 +22,6 @@ DISTRICT_MAPPING = {
     10: "Sarrià-Sant Gervasi"
 }
 
-
 # Mapeo de turnos
 TURN_MAPPING = {
     'matí': 1,      # 6:00 - 14:00
@@ -43,106 +42,94 @@ WEEKDAY_MAPPING = {
 
 # Mapeo de barrios a códigos (ejemplos principales)
 NEIGHBORHOOD_MAPPING = {
-    # Ciutat Vella
-    'el Raval': 1,
-    'el Barri Gòtic': 2,
-    'la Barceloneta': 3,
-    'Sant Pere, Santa Caterina i la Ribera': 4,
-    
-    # Eixample
-    'la Dreta de l\'Eixample': 5,
-    'l\'Antiga Esquerra de l\'Eixample': 6,
-    'la Nova Esquerra de l\'Eixample': 7,
-    'Sant Antoni': 8,
-    'la Sagrada Família': 9,
-    'el Fort Pienc': 10,
-    
-    # Sants-Montjuïc
-    'el Poble Sec': 11,
-    'la Marina del Prat Vermell': 12,
-    'la Marina de Port': 13,
-    'la Font de la Guatlla': 14,
-    'Hostafrancs': 15,
-    'la Bordeta': 16,
-    'Sants': 17,
-    
-    # Les Corts
-    'les Corts': 18,
-    'la Maternitat i Sant Ramon': 19,
-    'Pedralbes': 20,
-    
-    # Sarrià-Sant Gervasi
-    'Vallvidrera, el Tibidabo i les Planes': 21,
-    'Sarrià': 22,
-    'les Tres Torres': 23,
-    'Sant Gervasi - la Bonanova': 24,
-    'Sant Gervasi - Galvany': 25,
-    'el Putxet i el Farró': 26,
-    
-    # Gràcia
-    'Vallcarca i els Penitents': 27,
-    'el Coll': 28,
-    'la Salut': 29,
-    'Vila de Gràcia': 30,
-    'el Camp d\'en Grassot i Gràcia Nova': 31,
-    
-    # Horta-Guinardó
-    'el Baix Guinardó': 32,
-    'Can Baró': 33,
-    'el Guinardó': 34,
-    'la Font d\'en Fargues': 35,
-    'el Carmel': 36,
-    'la Teixonera': 37,
-    'Sant Genís dels Agudells': 38,
-    'Montbau': 39,
-    'la Vall d\'Hebron': 40,
-    'la Clota': 41,
-    'Horta': 42,
-    
-    # Nou Barris
-    'Vilapicina i la Torre Llobeta': 43,
-    'Porta': 44,
-    'el Turó de la Peira': 45,
-    'Can Peguera': 46,
-    'la Guineueta': 47,
-    'Canyelles': 48,
-    'les Roquetes': 49,
-    'Verdun': 50,
-    'la Prosperitat': 51,
-    'la Trinitat Nova': 52,
-    'Torre Baró': 53,
-    'Ciutat Meridiana': 54,
-    'Vallbona': 55,
-    
-    # Sant Andreu
-    'la Trinitat Vella': 56,
-    'Baró de Viver': 57,
-    'el Bon Pastor': 58,
-    'Sant Andreu': 59,
-    'la Sagrera': 60,
-    'el Congrés i els Indians': 61,
-    'Navas': 62,
-    
-    # Sant Martí
-    'el Camp de l\'Arpa del Clot': 63,
-    'el Clot': 64,
-    'el Parc i la Llacuna del Poblenou': 65,
-    'la Vila Olímpica del Poblenou': 66,
-    'el Poblenou': 67,
-    'Diagonal Mar i el Front Marítim del Poblenou': 68,
-    'el Besòs i el Maresme': 69,
-    'Provençals del Poblenou': 70,
-    'Sant Martí de Provençals': 71,
-    'la Verneda i la Pau': 72
+    0: 'Baró de Viver',
+    1: 'Can Baró',
+    2: 'Can Peguera',
+    3: 'Canyelles',
+    4: 'Ciutat Meridiana',
+    5: 'Desconegut',
+    6: 'Diagonal Mar i el Front Marítim del Poblenou',
+    7: 'Horta',
+    8: 'Hostafrancs',
+    9: 'Montbau',
+    10: 'Navas',
+    11: 'Pedralbes',
+    12: 'Porta',
+    13: 'Provençals del Poblenou',
+    14: 'Sant Andreu',
+    15: 'Sant Antoni',
+    16: 'Sant Genís dels Agudells',
+    17: 'Sant Gervasi - Galvany',
+    18: 'Sant Gervasi - la Bonanova',
+    19: 'Sant Martí de Provençals',
+    20: 'Sant Pere, Santa Caterina i la Ribera',
+    21: 'Sants',
+    22: 'Sants - Badal',
+    23: 'Sarrià',
+    24: 'Torre Baró',
+    25: 'Vallbona',
+    26: 'Vallcarca i els Penitents',
+    27: 'Vallvidrera, el Tibidabo i les Planes',
+    28: 'Verdun',
+    29: 'Vilapicina i la Torre Llobeta',
+    30: 'el Baix Guinardó',
+    31: 'el Barri Gòtic',
+    32: 'el Besòs i el Maresme',
+    33: 'el Bon Pastor',
+    34: "el Camp d'en Grassot i Gràcia Nova",
+    35: "el Camp de l'Arpa del Clot",
+    36: 'el Carmel',
+    37: 'el Clot',
+    38: 'el Coll',
+    39: 'el Congrés i els Indians',
+    40: 'el Fort Pienc',
+    41: 'el Guinardó',
+    42: 'el Parc i la Llacuna del Poblenou',
+    43: 'el Poble Sec',
+    44: 'el Poble-sec',
+    45: 'el Poblenou',
+    46: 'el Putxet i el Farró',
+    47: 'el Raval',
+    48: 'el Turó de la Peira',
+    49: "l'Antiga Esquerra de l'Eixample",
+    50: 'la Barceloneta',
+    51: 'la Bordeta',
+    52: 'la Clota',
+    53: "la Dreta de l'Eixample",
+    54: "la Font d'en Fargues",
+    55: 'la Font de la Guatlla',
+    56: 'la Guineueta',
+    57: 'la Marina de Port',
+    58: 'la Marina del Prat Vermell',
+    59: 'la Maternitat i Sant Ramon',
+    60: 'la Nova Esquerra de l\'Eixample',
+    61: 'la Prosperitat',
+    62: 'la Sagrada Família',
+    63: 'la Sagrera',
+    64: 'la Salut',
+    65: 'la Teixonera',
+    66: 'la Trinitat Nova',
+    67: 'la Trinitat Vella',
+    68: "la Vall d'Hebron",
+    69: 'la Verneda i la Pau',
+    70: 'la Vila Olímpica del Poblenou',
+    71: 'la Vila de Gràcia',
+    72: 'les Corts',
+    73: 'les Roquetes',
+    74: 'les Tres Torres',
 }
 
+DISTRICT_NAME_TO_CODE = {v: k for k, v in DISTRICT_MAPPING.items()}
+NEIGHBORHOOD_NAME_TO_CODE = {v: k for k, v in NEIGHBORHOOD_MAPPING.items()}
+
 class AccidentPredictor:
-    def __init__(self, model_path='xgboost_model_balanceado.pkl'):
+    def __init__(self, model_path='xgboost_model_definitivo.pkl', use_geocoding=True):
         """
         Inicializa el predictor de accidentes.
         
         Args:
             model_path (str): Ruta al archivo del modelo entrenado
+            use_geocoding (bool): Si usar servicio de geocoding para mejor precisión
         """
         try:
             self.model = joblib.load(model_path)
@@ -150,6 +137,17 @@ class AccidentPredictor:
         except Exception as e:
             logging.error(f"Error al cargar el modelo: {e}")
             raise
+        
+        # Inicializar servicio de geocoding si está habilitado
+        self.geocoding_service = None
+        if use_geocoding:
+            try:
+                from modules.geocoding_service import GeocodingService
+                self.geocoding_service = GeocodingService(use_online=False)
+                logging.info("Servicio de geocoding inicializado")
+            except Exception as e:
+                logging.warning(f"No se pudo inicializar el servicio de geocoding: {e}")
+                self.geocoding_service = None
     
     def get_turn_from_hour(self, hour):
         """
@@ -172,9 +170,6 @@ class AccidentPredictor:
         """
         Determina el distrito basado en las coordenadas.
         
-        Esta es una implementación simplificada. En producción, deberías usar
-        un servicio de geocoding reverso o tener polígonos de distritos.
-        
         Args:
             lat (float): Latitud
             lon (float): Longitud
@@ -182,32 +177,39 @@ class AccidentPredictor:
         Returns:
             int: Código del distrito
         """
+        # Primero intentar con servicio de geocoding si está disponible
+        if self.geocoding_service:
+            try:
+                location_info = self.geocoding_service.reverse_geocode(lat, lon)
+                district_name = location_info.get('district')
+                if district_name and district_name in DISTRICT_NAME_TO_CODE:
+                    return DISTRICT_NAME_TO_CODE[district_name]
+            except Exception as e:
+                logging.warning(f"Error en geocoding, usando método de respaldo: {e}")
+        
         # Implementación simplificada basada en rangos aproximados
         # En producción, usar geocoding reverso o polígonos reales
         
         if lat > 41.42 and lon < 2.15:
-            return DISTRICT_MAPPING['Nou Barris']
+            return 6  # Nou Barris
         elif lat > 41.42 and lon > 2.15:
-            return DISTRICT_MAPPING['Sant Andreu']
+            return 7  # Sant Andreu
         elif lat > 41.40 and lon > 2.18:
-            return DISTRICT_MAPPING['Sant Martí']
+            return 8  # Sant Martí
         elif lat > 41.40 and lon < 2.12:
-            return DISTRICT_MAPPING['Sarrià-Sant Gervasi']
+            return 10  # Sarrià-Sant Gervasi
         elif lat < 41.37 and lon < 2.14:
-            return DISTRICT_MAPPING['Sants-Montjuïc']
+            return 9  # Sants-Montjuïc
         elif 41.38 < lat < 41.40 and 2.16 < lon < 2.18:
-            return DISTRICT_MAPPING['Eixample']
+            return 2  # Eixample
         elif lat < 41.38 and lon > 2.17:
-            return DISTRICT_MAPPING['Ciutat Vella']
+            return 0  # Ciutat Vella
         else:
-            return DISTRICT_MAPPING['Eixample']  # Por defecto
+            return 2  # Eixample por defecto
     
     def get_neighborhood_from_coordinates(self, lat, lon):
         """
         Determina el barrio basado en las coordenadas.
-        
-        Esta es una implementación simplificada. En producción, deberías usar
-        un servicio de geocoding reverso.
         
         Args:
             lat (float): Latitud
@@ -216,26 +218,35 @@ class AccidentPredictor:
         Returns:
             int: Código del barrio
         """
+        # Primero intentar con servicio de geocoding si está disponible
+        if self.geocoding_service:
+            try:
+                location_info = self.geocoding_service.reverse_geocode(lat, lon)
+                neighborhood_name = location_info.get('neighborhood')
+                if neighborhood_name and neighborhood_name in NEIGHBORHOOD_NAME_TO_CODE:
+                    return NEIGHBORHOOD_NAME_TO_CODE[neighborhood_name]
+            except Exception as e:
+                logging.warning(f"Error en geocoding, usando método de respaldo: {e}")
+        
         # Implementación muy simplificada
         # En producción, usar geocoding reverso
         
         # Algunos ejemplos de barrios conocidos por coordenadas aproximadas
         if 41.403 < lat < 41.405 and 2.173 < lon < 2.175:
-            return NEIGHBORHOOD_MAPPING['la Sagrada Família']
+            return NEIGHBORHOOD_NAME_TO_CODE['la Sagrada Família']
         elif 41.386 < lat < 41.388 and 2.167 < lon < 2.170:
-            return NEIGHBORHOOD_MAPPING['la Dreta de l\'Eixample']
+            return NEIGHBORHOOD_NAME_TO_CODE["la Dreta de l'Eixample"]
         elif 41.379 < lat < 41.382 and 2.188 < lon < 2.191:
-            return NEIGHBORHOOD_MAPPING['la Barceloneta']
+            return NEIGHBORHOOD_NAME_TO_CODE['la Barceloneta']
         else:
-            # Por defecto, devolver un barrio basado en el distrito
             district = self.get_district_from_coordinates(lat, lon)
-            # Devolver el primer barrio del distrito
-            if district == DISTRICT_MAPPING['Eixample']:
-                return NEIGHBORHOOD_MAPPING['la Dreta de l\'Eixample']
-            elif district == DISTRICT_MAPPING['Ciutat Vella']:
-                return NEIGHBORHOOD_MAPPING['el Raval']
+            if district == DISTRICT_NAME_TO_CODE['Eixample']:
+                return NEIGHBORHOOD_NAME_TO_CODE["la Dreta de l'Eixample"]
+            elif district == DISTRICT_NAME_TO_CODE['Ciutat Vella']:
+                return NEIGHBORHOOD_NAME_TO_CODE["el Raval"]
             else:
-                return 30  # Vila de Gràcia como default
+                return 30  # el Baix Guinardó como default
+
     
     def predict_segment_risk(self, lat, lon, datetime_obj):
         """
@@ -261,12 +272,9 @@ class AccidentPredictor:
         
         # Crear DataFrame con las características en el orden correcto
         features = pd.DataFrame({
-            'Hora_dia': [hour],
-            'Mes_any': [month],
             'Descripcio_torn_num': [turn],
-            'Nom_districte_num': [district],
             'Descripcio_dia_setmana_num': [weekday],
-            'Codi_barri': [neighborhood]
+            'Codi_barri': [neighborhood],
         })
         
         # Hacer predicción

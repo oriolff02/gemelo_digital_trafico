@@ -3,26 +3,16 @@ Configuraciones para el Gemelo Digital de Tráfico Urbano.
 Contiene constantes, configuraciones y valores predeterminados.
 """
 
-# Constantes para Barcelona (en lugar de Sant Adrià del Besòs)
-MUNICIPALITY_NAME = "Barcelona"
-CITY_CENTER = [41.3874, 2.1686]  # [latitud, longitud] - Plaza Catalunya
-BBOX = "2.0770,41.3201,2.2299,41.4682"  # [minLon,minLat,maxLon,maxLat] - Cubre toda Barcelona
-
 # Configuración de APIs (usar variables de entorno en producción)
-TOMTOM_API_KEY = "7gvBs3RZ4QYQlePvsYtgkOv1cKowSsm4"  # Reemplazar con tu clave o usar environ
 ORS_API_KEY = "5b3ce3597851110001cf6248c5f5de61991b4c0ba5448d48d832b32d"  # Reemplazar con tu clave o usar environ
 
 # Endpoints de TomTom
-TOMTOM_INCIDENTS_ENDPOINT = "https://api.tomtom.com/traffic/services/5/incidentDetails"
 
 # Endpoints de OpenRouteService
 ORS_DIRECTIONS_ENDPOINT = "https://api.openrouteservice.org/v2/directions/driving-car"
 
-# Configuración de caché
-CACHE_TTL = 300  # Tiempo de vida de la caché en segundos (5 minutos)
-CACHE_DIR = ".cache"
-
-# Lugares predefinidos en Barcelona (para el selector de rutas)
+MUNICIPALITY_NAME = "Barcelona"
+CITY_CENTER = [41.3874, 2.1686]
 PREDEFINED_LOCATIONS = {
     "Plaza Catalunya": (41.3874, 2.1686),
     "Sagrada Familia": (41.4036, 2.1744),
@@ -33,27 +23,38 @@ PREDEFINED_LOCATIONS = {
     "Hospital Clínic": (41.3892, 2.1507),
     "Estación de Sants": (41.3795, 2.1401),
     "Aeropuerto El Prat": (41.2974, 2.0833),
-    "Torre Glòries": (41.4033, 2.1896)
+    "Torre Glòries": (41.4033, 2.1896),
+    "Diagonal Mar": (41.4106, 2.2186),
+    "Forum": (41.4097, 2.2293),
+    "Hospital de Sant Pau": (41.4122, 2.1740),
+    "Universitat de Barcelona": (41.3868, 2.1651),
+    "Passeig de Gràcia": (41.3917, 2.1650),
+    "Parc de la Ciutadella": (41.3887, 2.1901),
+    "El Born": (41.3846, 2.1837),
+    "La Rambla": (41.3809, 2.1730),
+    "Gràcia": (41.4030, 2.1561),
+    "Clot": (41.4102, 2.1873),
+    "Sant Andreu": (41.4361, 2.1894),
+    "Nou Barris": (41.4416, 2.1777),
+    "Les Corts": (41.3859, 2.1357),
+    "Sarrià": (41.4001, 2.1218),
+    "Horta": (41.4300, 2.1672),
+    "Poble-sec": (41.3734, 2.1613),
+    "Poble Nou": (41.4031, 2.1999),
+    "Vallcarca": (41.4142, 2.1481),
+    "Sant Gervasi": (41.3992, 2.1392),
+    "El Raval": (41.3800, 2.1699),
+    "Zona Universitaria": (41.3818, 2.1202),
+    "Glòries": (41.4035, 2.1884),
+    "Sants": (41.3801, 2.1400),
+    "Tres Torres": (41.3991, 2.1303),
+    "Sant Martí": (41.4098, 2.2037),
+    "La Sagrera": (41.4214, 2.1867),
+    "La Vila Olímpica": (41.3909, 2.1992),
+    "Trinitat Vella": (41.4410, 2.1975),
+    "Bon Pastor": (41.4365, 2.1980),
+    "Vall d'Hebron": (41.4338, 2.1486),
+    "Pedralbes": (41.3914, 2.1161)
 }
 
-# Categorías de incidentes para visualización
-INCIDENT_CATEGORIES = {
-    'ACCIDENT': {'name': 'Accidente', 'color': 'red', 'icon': 'car-crash'},
-    'CONGESTION': {'name': 'Congestión', 'color': 'orange', 'icon': 'traffic-cone'},
-    'CONSTRUCTION': {'name': 'Obras', 'color': 'yellow', 'icon': 'tools'},
-    'CLOSURES': {'name': 'Cierre', 'color': 'black', 'icon': 'road-closed'},
-    'LANE_RESTRICTION': {'name': 'Restricción de carril', 'color': 'purple', 'icon': 'lanes'},
-    'WEATHER': {'name': 'Clima', 'color': 'blue', 'icon': 'cloud-rain'},
-    'OTHER': {'name': 'Otro', 'color': 'gray', 'icon': 'info-sign'}
-}
-
-# Mapa de iconCategory numérico a categoría textual
-ICON_CATEGORY_MAP = {
-    1: "ACCIDENT",
-    2: "CONGESTION", 
-    3: "CONSTRUCTION",
-    4: "CLOSURES",
-    5: "LANE_RESTRICTION",
-    6: "OTHER",
-    7: "WEATHER"
-}
+CACHE_DIR = ".cache"
