@@ -67,7 +67,7 @@ def add_incidents_to_map(m, incidents_df):
     for _, incident in incidents_df.iterrows():
         if pd.notna(incident['latitud']) and pd.notna(incident['longitud']):
             # Determinar color según categoría
-            category = incident['categoria']
+            category = incident['tipo']
             category_info = INCIDENT_CATEGORIES.get(category, INCIDENT_CATEGORIES['OTHER'])
             color = category_info['color']
             icon_name = category_info['icon']
@@ -76,12 +76,6 @@ def add_incidents_to_map(m, incidents_df):
             popup_html = f"""
             <div style="width: 250px">
                 <h4>{incident['tipo']} - {category_info['name']}</h4>
-                <b>Descripción:</b> {incident['descripcion']}<br>
-                <b>Vías afectadas:</b> {incident['vias_afectadas']}<br>
-                <b>Retraso:</b> {int(incident['retraso_segundos']/60)} minutos<br>
-                <b>Longitud:</b> {incident['longitud_metros']/1000:.2f} km<br>
-                <b>Inicio:</b> {incident['hora_inicio'].strftime('%H:%M') if not pd.isna(incident['hora_inicio']) else 'N/A'}<br>
-                <b>Fin estimado:</b> {incident['hora_fin'].strftime('%H:%M') if not pd.isna(incident['hora_fin']) else 'N/A'}<br>
             </div>
             """
             
@@ -90,7 +84,7 @@ def add_incidents_to_map(m, incidents_df):
                 location=[incident['latitud'], incident['longitud']],
                 popup=folium.Popup(popup_html, max_width=300),
                 icon=folium.Icon(color=color, icon=icon_name),
-                tooltip=f"{incident['tipo']}: {incident['descripcion'][:30]}..."
+                tooltip=f"{incident['tipo']}"
             ).add_to(incidents_cluster)
             
             # Dibujar la geometría del incidente (si hay múltiples puntos)
@@ -101,7 +95,6 @@ def add_incidents_to_map(m, incidents_df):
                     color=color,
                     weight=5,
                     opacity=0.7,
-                    tooltip=incident['descripcion'][:50]
                 ).add_to(m)
     
     # Añadir mapa de calor si hay suficientes datos

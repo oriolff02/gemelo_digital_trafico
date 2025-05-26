@@ -27,7 +27,7 @@ from config.settings import (
 from modules.traffic_api import get_traffic_incidents, generate_mock_traffic_data
 from modules.route_api import calculate_optimized_route, generate_mock_route_data
 from modules.visualization import create_base_map, add_incidents_to_map, add_route_to_map
-from modules.analysis import generate_incident_summary, plot_incidents_by_category, plot_delay_by_type, analyze_route_impact
+from modules.analysis import generate_incident_summary, plot_incidents_by_type, analyze_route_impact
 from utils.helpers import ensure_directory_exists, format_time_difference, format_distance
 
 # Configuración inicial
@@ -264,48 +264,23 @@ def main():
             summary = generate_incident_summary(incidents_df)
             
             # Estadísticas básicas en tarjetas
-            col1, col2, col3 = st.columns(3)
-            
+            col1 = st.columns(1)[0]
             with col1:
                 st.metric("Total de incidentes", summary["total_incidents"])
             
-            with col2:
-                st.metric(
-                    "Retraso promedio", 
-                    f"{summary['avg_delay']:.1f} min"
-                )
+            # Mostrar incidentes por tipo (si quieres)
+            st.write("### Incidentes por tipo")
+            for tipo, count in summary["by_type"].items():
+                st.write(f"- {tipo}: {count}")
             
-            with col3:
-                st.metric(
-                    "Impacto total", 
-                    f"{summary['total_delay_hours']:.1f} horas-persona"
-                )
-            
-            # Gráficas
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.subheader("Incidentes por categoría")
-                fig = plot_incidents_by_category(incidents_df)
-                st.pyplot(fig)
-            
-            with col2:
-                st.subheader("Retraso promedio por tipo")
-                fig = plot_delay_by_type(incidents_df)
-                st.pyplot(fig)
-            
-            # Incidente más grave
-            if summary["most_severe"]:
-                st.subheader("Incidente más grave")
-                severe = summary["most_severe"]
-                st.info(
-                    f"**{severe['tipo']}**: {severe['descripcion']} en {severe['via']}. "
-                    f"Retraso estimado: {severe['retraso_minutos']:.1f} minutos."
-                )
+            # Gráfica
+            st.subheader("Incidentes por tipo")
+            fig = plot_incidents_by_type(incidents_df)
+            st.pyplot(fig)
             
             # Tabla con detalles
             st.subheader("Detalles de incidentes")
-            display_cols = ['tipo', 'descripcion', 'vias_afectadas', 'retraso_segundos', 'longitud_metros', 'hora_inicio', 'hora_fin']
+            display_cols = ['tipo']
             st.dataframe(incidents_df[display_cols])
             
             # Explicación de campos
@@ -317,21 +292,10 @@ def main():
                 - **CONSTRUCTION**: Obras o trabajos en la vía.
                 - **LANE_RESTRICTION**: Restricción de carriles.
                 - **CLOSURES**: Cierre completo de vía.
-                
-                **descripcion**: Descripción detallada del incidente proporcionada por TomTom.
-                
-                **vias_afectadas**: Nombres de las calles o carreteras afectadas.
-                
-                **retraso_segundos**: Tiempo de retraso estimado en segundos.
-                
-                **longitud_metros**: Extensión del incidente en metros.
-                
-                **hora_inicio**: Momento en que se reportó el incidente.
-                
-                **hora_fin**: Estimación de cuándo se resolverá el incidente.
                 """)
         else:
             st.info("Carga los datos en la pestaña 'Mapa de Incidentes' para ver el análisis.")
+
     
     with tab3:
         st.subheader("Sobre el Proyecto")

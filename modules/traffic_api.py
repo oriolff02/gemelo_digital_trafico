@@ -38,12 +38,13 @@ def get_traffic_incidents(api_key, bbox=BBOX, use_cache=True):
                     # Reconstruir DataFrame desde caché
                     df = pd.DataFrame(cache_data["incidents"])
                     # Convertir fechas de nuevo
-                    if 'hora_inicio' in df.columns and df['hora_inicio'].notna().any():
-                        df['hora_inicio'] = pd.to_datetime(df['hora_inicio'])
-                    if 'hora_fin' in df.columns and df['hora_fin'].notna().any():
-                        df['hora_fin'] = pd.to_datetime(df['hora_fin'])
+                    if 'hora_inicio' in df.columns and not df.empty:
+                        df['hora_inicio'] = pd.to_datetime(df['hora_inicio'], format='ISO8601')
+                    if 'hora_fin' in df.columns and not df.empty:
+                        df['hora_fin'] = pd.to_datetime(df['hora_fin'], format='ISO8601')
                     return df
-        except (json.JSONDecodeError, KeyError):
+        except (json.JSONDecodeError, KeyError) as e:
+            st.warning(f"Problema con el caché, realizando nueva petición: {e}")
             pass  # Si hay problemas con el caché, seguimos y hacemos la petición real
     
     # Parámetros para la petición a la API de TomTom
@@ -68,67 +69,43 @@ def get_traffic_incidents(api_key, bbox=BBOX, use_cache=True):
         # En modules/traffic_api.py, actualiza el procesamiento de datos:
 
         # Convertir a DataFrame para facilitar el análisis
-        incidents = []
+        # Convertir a DataFrame para facilitar el análisis
+        category_map = {
+            0: "Desconocido",
+            1: "Accidente",
+            2: "Niebla",
+            3: "Condiciones peligrosas",
+            4: "Lluvia",
+            5: "Hielo",
+            6: "Congestión",
+            7: "Carril cerrado",
+            8: "Vía cerrada",
+            9: "Obras",
+            10: "Viento",
+            11: "Inundación",
+            14: "Vehículo averiado"
+        }
 
+        incidents = []
         for incident in data['incidents']:
-            # La estructura ha cambiado en la v5 de la API
-            incident_type = "INCIDENT"  # Valor predeterminado si no hay tipo específico
-            
-            # Extraer propiedades
             properties = incident.get('properties', {})
-            category = properties.get('iconCategory', 'OTHER')
-            
-            # Convertir iconCategory numérico a categoría textual
-            category_map = {
-                1: "ACCIDENT",
-                2: "CONGESTION",
-                3: "CONSTRUCTION",
-                4: "CLOSURES",
-                5: "LANE_RESTRICTION",
-                6: "OTHER",
-                7: "WEATHER"
-            }
-            
-            category_text = category_map.get(category, "OTHER")
-            
-            # Extraer las coordenadas de la geometría
+            category_num = properties.get('iconCategory', 0)
+            tipo = category_map.get(category_num, f"Desconocido ({category_num})")
             geometry = incident.get('geometry', {})
             coordinates = []
-            
             if geometry.get('type') == 'LineString':
-                # Invertir coordenadas de [lon, lat] a [lat, lon]
-                coordinates = [(lon[1], lon[0]) for lon in geometry.get('coordinates', [])]
-            
-            # Si no hay coordenadas, continuamos con el siguiente incidente
+                coordinates = [(coord[1], coord[0]) for coord in geometry.get('coordinates', [])]
             if not coordinates:
                 continue
-            
-            # Crear descripción genérica si no hay detalles
-            event_desc = "Incidente de tráfico"
-            
-            # Valores por defecto para campos que podrían no estar presentes
-            delay = 300  # 5 minutos por defecto
-            length = 500  # 500 metros por defecto
-            road_numbers = ""
-            start_time = datetime.now() - timedelta(hours=1)
-            end_time = datetime.now() + timedelta(hours=2)
-            
-            # Crear entrada para el DataFrame
+
             incidents.append({
-                'tipo': category_text,
-                'categoria': category_text,
-                'descripcion': event_desc,
-                'vias_afectadas': road_numbers,
-                'retraso_segundos': delay,
-                'longitud_metros': length,
-                'hora_inicio': start_time,
-                'hora_fin': end_time,
+                'tipo': tipo,
+                'categoria': tipo,
                 'coordenadas': coordinates,
-                # Para facilitar el mapeo, tomamos el primer punto como referencia
                 'latitud': coordinates[0][0] if coordinates else None,
                 'longitud': coordinates[0][1] if coordinates else None
             })
-        
+
         df = pd.DataFrame(incidents)
         
         # Guardar en caché para futuras consultas

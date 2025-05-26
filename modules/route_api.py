@@ -91,7 +91,7 @@ def generate_mock_route_data(start_coords, end_coords):
     intermediate_points = []
     
     # Calcular puntos intermedios simples (interpolación lineal)
-    steps = 5  # Número de puntos intermedios
+    steps = 15  # Número de puntos intermedios
     for i in range(1, steps):
         fraction = i / steps
         lon = start[0] + (end[0] - start[0]) * fraction
